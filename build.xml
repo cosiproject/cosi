@@ -1,0 +1,269 @@
+<?xml version="1.0" ?>
+<project default="all" name="Cosi">
+	<property name="javadoc.packages" value="org.cosiproject.cosi.*" />
+	<property name="examples" value="examples" />
+	<property name="examples.main" value="org.cosiproject.cosi.examples.DefaultExample" />
+
+
+
+
+	<property name="manifest.title" value="${ant.project.name}" />
+	<property name="manifest.vendor" value="The Cosi Project." />
+
+
+
+	<property name="svncl.path" value="/usr/local/bin/svncl.pl" />
+
+	<tstamp>
+		<format property="TODAY" pattern="yyyy-MM-dd HH:mm:ss" />
+	</tstamp>
+	<tstamp>
+		<format property="YEAR" pattern="yyyy" />
+	</tstamp>
+
+	<exec executable="svn" output="svn.properties">
+		<arg value="info" />
+	</exec>
+	<!-- Using Javascript functions to convert the string -->
+	<script language="javascript">
+		<![CDATA[
+
+		            // getting the value
+		            lowercaseValue = project.getProperty("ant.project.name");
+					lower = lowercaseValue.toLowerCase();
+		            // concatenate the uppercase with the rest
+		         
+
+		            // store the result in a new property
+		            project.setProperty("lower",lower);
+
+		        ]]>
+	</script>
+	<buildnumber file="build.num" />
+	<property prefix="svn" file="svn.properties" />
+	<delete file="svn.properties" />
+	<tstamp>
+		<format property="version.date" pattern="yyyyMM" />
+	</tstamp>
+	<property name="manifest.version" value="${version}" />
+	<property prefix="dev" file="dev.properties" />
+	<property name="build.dir" value="bin" />
+	<property name="build.include" value="include" />
+	<property name="src" value="src" />
+	<property name="lib" value="libs" />
+
+	<!-- <property name="version.final" value="${version.main}.${version.revision}" /> -->
+	<property name="version.build" value="${build.number}" />
+	<property name="version.revision" value="${svn.Revision}" />
+	<property name="version.default" value="${version.revision}.${version.build}" />
+	<!--
+			Version configuration
+			
+			${version.revision}	- Current SVN Revision
+			${version.build} - Buildnumber
+			${version.default} - ${version.revision}.${version.build}
+		-->
+	<property name="version" value="0.1.${version.revision}" />
+
+
+	<property name="javadoc.svnbase" value="${svn.URL}" />
+	<property name="output" value="${lower}-${version}" />
+	<property name="output.current" value="${lower}-current" />
+	<property name="output.zip" value="${lower}-${version}.zip" />
+	<property name="output.src" value="${lower}-${version}-sources.jar" />
+
+	<property name="build.releases" value="releases" />
+	<property name="release.base" value="${build.releases}${file.separator}${output}" />
+
+	<property name="debug" value="off" />
+
+
+
+	<target name="init">
+		<delete dir="${build.dir}" />
+		<mkdir dir="${build.dir}" />
+	</target>
+
+	<target name="manifest">
+
+	</target>
+	<target name="compile" depends="init, manifest">
+		<javac srcdir="${src}" destdir="${build.dir}" debug="${debug}">
+			<classpath>
+				<fileset dir="${lib}">
+					<include name="**/*.jar" />
+				</fileset>
+				
+			</classpath>
+		</javac>
+		<copy todir="${build.dir}">
+			<fileset dir="${src}">
+				<include name="**/*.xml" />
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="javadoc">
+		<!-- replace svn base path for source links -->
+		<copy todir="${src}">
+			<fileset dir="${src}">
+				<include name="**/*.tmpl" />
+			</fileset>
+
+			<mapper type="glob" from="*.tmpl" to="*.html" />
+
+		</copy>
+		<replace dir="${src}" includes="**/*.html" value="${javadoc.svnbase}">
+			<replacetoken>%JAVADOC.SVNBASE%</replacetoken>
+		</replace>
+		<javadoc verbose="false" linksource="true" packagenames="${javadoc.packages}" sourcepath="src" excludepackagenames="" defaultexcludes="yes" destdir="javadoc" author="true" version="true" use="true" windowtitle="${manifest.title}">
+
+		</javadoc>
+
+		<delete dir="${src}" includes="**/*.html" />
+		<!-- foobar -->
+	</target>
+
+	<target name="generate-licence">
+		<echo file="${build.include}${file.separator}LICENSE.txt">
+Copyright (c) ${YEAR}, ${manifest.vendor}
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+    * Redistributions of source code must retain the above copyright
+      notice, this list of conditions and the following disclaimer.
+    * Redistributions in binary form must reproduce the above copyright
+      notice, this list of conditions and the following disclaimer in the
+      documentation and/or other materials provided with the distribution.
+    * Neither the name of the '${manifest.vendor}' nor the
+      names of its contributors may be used to endorse or promote products
+      derived from this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL '${manifest.vendor}' BE LIABLE FOR ANY
+DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+		</echo>
+
+	</target>
+
+	<target name="generate-changelog">
+		<property name="out" value="${build.include}${file.separator}ChangeLog" />
+		<echo file="${out}">${ant.project.name}
+Date: ${TODAY}
+Version: ${version}
+			
+
+</echo>
+		<exec executable="svn" output=".svnlog.xml">
+			<arg value="log" />
+			<arg value="-v" />
+			<arg value="--xml" />
+		</exec>
+		<exec append="true" executable="${svncl.path}" output="${out}">
+			<arg value="${basedir}${file.separator}.svnlog.xml" />
+		</exec>
+
+	</target>
+
+	<target name="generate-src-jar" depends="compile">
+		<jar destfile="${build.releases}${file.separator}${output}${file.separator}${output}-sources.jar" basedir="${src}">
+			<include name="**/*.java" />
+
+
+		</jar>
+
+	</target>
+	<target name="generate-bin-jar" depends="compile">
+		<jar destfile="${build.releases}${file.separator}${output}${file.separator}${output}.jar" basedir="${build.dir}">
+			<include name="**/*.class" />
+			<include name="**/*.xml" />
+			<manifest>
+				<attribute name="Built-By" value="${user.name}" />
+				<attribute name="Built-On" value="${os.name} ${os.version} (${os.arch})" />
+				<attribute name="Built-Date" value="${TODAY}" />
+				<section name="common">
+					<attribute name="Specification-Title" value="${manifest.title}" />
+					<attribute name="Specification-Version" value="${manifest.version}" />
+					<attribute name="Specification-Vendor" value="${manifest.vendor}" />
+				</section>
+
+			</manifest>
+		</jar>
+
+	</target>
+
+	<target name="generate-examples-jar" depends="compile">
+		<mkdir dir="${build.dir}${file.separator}examples" />
+		<javac srcdir="${examples}" destdir="${build.dir}${file.separator}examples" debug="${debug}">
+			<classpath>
+				<fileset dir="${lib}">
+					<include name="**/*.jar" />
+				</fileset>
+			</classpath>
+		</javac>
+		<jar destfile="${build.releases}${file.separator}${output}${file.separator}${lower}-examples-${version}.jar" basedir="${build.dir}${file.separator}examples">
+			<include name="**/*.class" />
+		</jar>
+	</target>
+
+	<target name="prepare-release">
+		<copy todir="${release.base}${file.separator}javadoc">
+			<fileset dir="javadoc" />
+		</copy>
+	</target>
+
+	<target name="generate-bin-zip" depends="generate-bin-jar, generate-src-jar, generate-examples-jar, prepare-release">
+		<property name="zipbase" value="${release.base}" />
+		<copy todir="${release.base}">
+			<fileset dir="include" />
+		</copy>
+		<zip destfile="${build.releases}${file.separator}${output}-bin.zip" basedir="${release.base}">
+
+		</zip>
+		<checksum file="${build.releases}${file.separator}${output}-bin.zip" />
+		<delete dir="${release.base}" />
+	</target>
+	<target name="generate-javadoc-zip" depends="javadoc">
+		<zip destfile="${build.releases}${file.separator}${output}-javadoc.zip" basedir="${basedir}${file.separator}javadoc" />
+		<checksum file="${build.releases}${file.separator}${output}-javadoc.zip" />
+	</target>
+	<target name="generate-src-zip" depends="init">
+		<property name="zipbase" value="${release.base}-sources" />
+		<copy todir="${release.base}-sources">
+			<fileset dir="include" />
+		</copy>
+		<copy todir="${release.base}-sources${file.separator}${src}">
+			<fileset dir="${src}" />
+		</copy>
+
+		<zip destfile="${build.releases}${file.separator}${output}-sources.zip" basedir="${release.base}-sources">
+
+		</zip>
+		<checksum file="${build.releases}${file.separator}${output}-sources.zip" />
+		<delete dir="${release.base}-sources" />
+	</target>
+	<target name="all" depends="generate-bin-zip, generate-src-zip, generate-javadoc-zip">
+
+
+
+	</target>
+
+	<target name="clean">
+		<delete dir="${build.dir}" />
+	</target>
+
+	<target name="upload">
+		<!-- javadoc -->
+		<ftp server="${dev.server}" remotedir="javadoc" userid="${dev.username}" password="${dev.password}" depends="yes" passive="true">
+			<fileset dir="javadoc" />
+		</ftp>
+	</target>
+</project>

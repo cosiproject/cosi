@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<localizer>
+	<key name="usage">Benutzung:</key>
+	<key name="usage1">
+	cosi [Optionen]
+	cosi [Optionen] -s [Plugin Set] [Plugin Optionen]
+	cosi [Optionen] -s [Plugin Set] [Plugin Optionen] [ -s [Plugin Set] [Plugin Optionen] ]
+	</key>
+	<key name="options">Optionen:</key>
+	<key name="pluginsets">Plugin Sets:</key>
+	
+</localizer>

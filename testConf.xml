@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:conf xmlns:ns2="http://cosi.lother.net">
+    <key name="kloud">
+        <value option="">
+            <string>Foobar</string>
+        </value>
+        <value option="">
+            <string>Foobar</string>
+        </value>
+        <value option="">
+            <file>/A/File/Foobar</file>
+        </value>
+    </key>
+</ns2:conf>

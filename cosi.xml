@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<cosi>
+    <pluginloader suffix="cpm">
+        <class>org.cosiproject.cosi.core.pluginloader.DefaultPluginLoader</class>
+        <directory>plugins</directory>
+    </pluginloader>
+</cosi>

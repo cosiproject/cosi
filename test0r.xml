@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:cpm xmlns:ns2="http://cosi.lother.net/">
+    <meta>
+        <name>Foobert</name>
+        <description>A small description</description>
+        <author>Konradowicz</author>
+        <email>Foo@bar.de</email>
+    </meta>
+    <version>
+        <micro>3</micro>
+        <minor>2</minor>
+        <major>1</major>
+    </version>
+    <plugin>
+        <entryPoint>net.lother.cosix.plugin.addressbook.Main</entryPoint>
+        <classpath src="/Users/lotherk/Documents/workspace/plugins/CosiX/AddressBook.cpmx/src/"/>
+    </plugin>
+</ns2:cpm>

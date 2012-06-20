@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<localizer locale="default">
+	<key name="argumentHelp">Zeigt diesen Text.</key>
+	<key name="argumentSafety">Startet COSI im safety Modus. Es werde nur die core plugins geladen.</key>
+	<key name="argumentVersion">Version</key>
+</localizer>
+
