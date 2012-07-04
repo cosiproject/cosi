@@ -3,9 +3,9 @@ package org.cosiproject.cosi.tools;
 import java.io.File;
 import java.util.ArrayList;
 
-import org.cosiproject.cosi.core.config.CosiXML;
-import org.cosiproject.cosi.core.config.PluginLoaderXML;
-import org.cosiproject.cosi.core.pluginloader.DefaultPluginLoader;
+import org.cosiproject.cosi.api.pluginloader.DefaultPluginLoader;
+import org.cosiproject.cosi.api.xml.CosiXML;
+import org.cosiproject.cosi.api.xml.PluginLoaderXML;
 import org.cosiproject.toolkit.tools.XMLTool;
 
 public class CreateBasicConfig {

@@ -38,15 +38,15 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import org.apache.log4j.Logger;
+import org.cosiproject.cosi.api.PluginAPI;
+import org.cosiproject.cosi.api.PluginContainer;
+import org.cosiproject.cosi.api.PluginLoader;
+import org.cosiproject.cosi.api.logger.COSIAppender;
+import org.cosiproject.cosi.api.pluginloader.DefaultPluginLoader;
+import org.cosiproject.cosi.api.pluginloader.PluginPool;
+import org.cosiproject.cosi.api.xml.CosiXML;
 import org.cosiproject.cosi.arguments.ArgumentHelp;
 import org.cosiproject.cosi.arguments.ArgumentVersion;
-import org.cosiproject.cosi.core.config.CosiXML;
-import org.cosiproject.cosi.core.logger.COSIAppender;
-import org.cosiproject.cosi.core.pluginloader.DefaultPluginLoader;
-import org.cosiproject.cosi.core.pluginloader.PluginLoader;
-import org.cosiproject.cosi.core.pluginloader.plugin.PluginAPI;
-import org.cosiproject.cosi.core.pluginloader.plugin.PluginContainer;
-import org.cosiproject.cosi.core.pluginloader.util.PluginPool;
 import org.cosiproject.cosi.cron.Cron;
 import org.cosiproject.cosi.thread.ThreadManager;
 import org.cosiproject.toolkit.argumentor.Argument;
@@ -66,6 +66,8 @@ import org.cosiproject.toolkit.version.Version;
  */
 public class Cosi {
 
+	/** The version */
+	private static Version VERSION = new Version("7.2012");
 	/** The logger. */
 	private static Logger logger = Logger.getLogger(Cosi.class);
 	
@@ -242,7 +244,7 @@ public class Cosi {
 	 * @return the version
 	 */
 	public static Version getVersion() {
-		return null;
+		return VERSION;
 	}
 
 	/**

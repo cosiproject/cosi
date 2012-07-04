@@ -43,10 +43,10 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 
 import org.apache.log4j.Logger;
-import org.cosiproject.cosi.core.pluginloader.xml.Classpath;
-import org.cosiproject.cosi.core.pluginloader.xml.Meta;
-import org.cosiproject.cosi.core.pluginloader.xml.CosiPluginModule;
-import org.cosiproject.cosi.core.pluginloader.xml.Plugin;
+import org.cosiproject.cosi.api.xml.CPMClasspath;
+import org.cosiproject.cosi.api.xml.CPMMeta;
+import org.cosiproject.cosi.api.xml.CosiPluginModule;
+import org.cosiproject.cosi.api.xml.Plugin;
 import org.cosiproject.toolkit.version.Version;
 
 public abstract class PluginXML {
@@ -56,19 +56,19 @@ public abstract class PluginXML {
 	
 	public static void main(String[] args) {
 		CosiPluginModule foo = new CosiPluginModule();
-		Meta info = new Meta();
+		CPMMeta info = new CPMMeta();
 		info.setAuthor("Konradowicz");
 		info.setDescription("A small description");
 		info.setEmail("Foo@bar.de");
 		info.setName("Foobert");
 		
 		// TODO: change to Meta
-		foo.setMeta(info);
+		foo.setCPMMeta(info);
 		
 		Plugin plugin = new Plugin();
 		plugin.setEntryPoint("net.lother.cosix.plugin.addressbook.Main");
-		List<Classpath> ffoo = new ArrayList<Classpath>();
-		Classpath cpmc = new Classpath();
+		List<CPMClasspath> ffoo = new ArrayList<CPMClasspath>();
+		CPMClasspath cpmc = new CPMClasspath();
 		cpmc.setSrc("/Users/lotherk/Documents/workspace/plugins/CosiX/AddressBook.cpmx/src/");
 		ffoo.add(cpmc);
 		plugin.setListClasspath(ffoo);
