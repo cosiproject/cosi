@@ -50,7 +50,7 @@
 	<property name="build.dir" value="bin" />
 	<property name="build.include" value="include" />
 	<property name="src" value="src" />
-	<property name="lib" value="libs" />
+	<property name="lib" value="lib" />
 
 	<!-- <property name="version.final" value="${version.main}.${version.revision}" /> -->
 	<property name="version.build" value="${build.number}" />
