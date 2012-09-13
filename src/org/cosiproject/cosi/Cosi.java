@@ -67,7 +67,7 @@ import org.cosiproject.toolkit.version.Version;
 public class Cosi {
 
 	/** The version */
-	private static Version VERSION = new Version("7.2012");
+	private static Version VERSION = new Version("7.2012", "Capricorn");
 	/** The logger. */
 	private static Logger logger = Logger.getLogger(Cosi.class);
 	
